@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, session, render_template, redirect, url_for
 from supabase import create_client, Client
-from flask_bcrypt import Bcrypt
 import os
 from datetime import datetime
+import hashlib  # Standard library for hashing
 
 app = Flask(__name__)
 
@@ -44,7 +44,14 @@ def initialize_vaccination_records(livestock_id):
 
     supabase.table("vaccinations").insert(records).execute()
 
-bcrypt = Bcrypt(app)  # For password hashing
+def hash_password(password):
+    """Hash a password using SHA-256"""
+    salt = "farm_care_salt"  # In production, use a proper salt strategy
+    return hashlib.sha256((password + salt).encode()).hexdigest()
+
+def check_password(hashed_password, user_password):
+    """Verify a password against its hash"""
+    return hashed_password == hash_password(user_password)
 
 @app.route("/")
 def home():
@@ -63,7 +70,7 @@ def signup():
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
-        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        hashed_password = hash_password(password)  # Use our new hash function
 
         # Insert user into Supabase
         response = supabase.table("users").insert({"name": name, "email": email, "password": hashed_password}).execute()
@@ -84,7 +91,7 @@ def login():
         response = supabase.table("users").select("*").eq("email", email).execute()
         user = response.data[0] if response.data else None
 
-        if user and bcrypt.check_password_hash(user["password"], password):
+        if user and check_password(user["password"], password):  # Use our new check function
             session["user"] = user["email"]
             return redirect(url_for("dashboard"))
         return jsonify({"error": "Invalid email or password!"}), 401
