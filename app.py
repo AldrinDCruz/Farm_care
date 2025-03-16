@@ -5,18 +5,17 @@ from flask_bcrypt import Bcrypt
 import os
 from datetime import datetime
 
-load_dotenv() 
-
 app = Flask(__name__)
 
 # Flask Session Configuration
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"  
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_FILE_DIR"] = os.environ.get("SESSION_FILE_DIR", "./flask_session")
 Session(app)
 
 # Supabase Configuration
-SUPABASE_URL = "https://pwohpwzbttvewrouiqdz.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://pwohpwzbttvewrouiqdz.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 import datetime
@@ -302,6 +301,10 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
-if __name__ == '__main__':
+# Set secret key from environment variable or use a default for development
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
+
+# Use the PORT environment variable provided by Render
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host="0.0.0.0", port=port)
