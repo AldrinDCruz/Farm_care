@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, session, render_template, redirect, url_for
-from flask_session import Session
 from supabase import create_client, Client
 from flask_bcrypt import Bcrypt
 import os
@@ -7,11 +6,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Flask Session Configuration
+# Replace Flask-Session with Flask's built-in session
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = os.environ.get("SESSION_FILE_DIR", "./flask_session")
-Session(app)
+# Set a secret key for session management
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
 
 # Supabase Configuration
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://pwohpwzbttvewrouiqdz.supabase.co")
