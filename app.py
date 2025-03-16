@@ -5,6 +5,8 @@ from flask_bcrypt import Bcrypt
 import os
 from datetime import datetime
 
+load_dotenv() 
+
 app = Flask(__name__)
 
 # Flask Session Configuration
@@ -300,6 +302,6 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
-if __name__ == "__main__":
-    app.secret_key = "supersecretkey"  
-    app.run(debug=True)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
