@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Details</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --light-color: #e8f5e9;
+            --dark-color: #1b5e20;
+            --danger-color: #e53935;
+            --text-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        /* Header styles - enhanced */
+        .site-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Improved body styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232e7d32' fill-opacity='0.05'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Enhanced farm header */
+        .farm-header {
+            background-color: var(--light-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .farm-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3));
+            pointer-events: none;
+        }
+        
+        .farm-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        /* Improved typography */
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+        
+        h1 {
+            margin-top: 0;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 3px;
+        }
+        
+        h2 {
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2::before {
+            content: '●';
+            color: var(--secondary-color);
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+        
+        /* Enhanced section styling */
+        .section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+            position: relative;
+        }
+        
+        .section:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* Improved form styling */
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid #eee;
+        }
+        
+        input, button {
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input {
+            background-color: white;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        button:hover::after {
+            left: 100%;
+        }
+        
+        /* Enhanced list items */
+        li {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--secondary-color);
+        }
+        
+        li:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        /* Enhanced badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-size: 0.85rem;
+            margin-right: 5px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        /* Improved vaccination link */
+        .vaccination-link {
+            text-decoration: none;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .vaccination-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* Responsive styles remain the same */
+    </style>
+</head>
+<body>
+    <!-- Add the new header -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <rect x="9" y="13" width="6" height="8"></rect>
+                </svg>
+                Farm Management
+            </div>
+            <nav class="nav-links">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="farm-header">
+        <h1 id="farmName"></h1>
+        <div>
+            <p id="farmLocation"></p>
+            <p id="farmSize"></p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">
+            <h2>Manage Crops</h2>
+        </div>
+        <form id="cropForm">
+            <input type="text" id="cropName" placeholder="Crop Name" required>
+            <input type="text" id="cropType" placeholder="Crop Type" required>
+            <input type="number" id="cropQuantity" placeholder="Quantity (kg)" required>
+            <input type="date" id="cropDate" required>
+            <button type="submit">Add Crop</button>
+        </form>
+
+        <ul id="cropList">
+            <li class="loading">Loading crops...</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">
+            <h2>Livestock</h2>
+        </div>
+        <form id="livestockForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="type" placeholder="Type (e.g., Cow, Goat)" required>
+            <input type="number" id="count" placeholder="Count" required>
+            <input type="number" id="age" placeholder="Age in months" required>
+            <input type="text" id="health_status" placeholder="Health Status" required>
+            <button type="submit">Add Livestock</button>
+        </form>
+        
+        <ul id="livestockList">
+            <li class="loading">Loading livestock...</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">
+            <h2>Manage Equipment</h2>
+        </div>
+        <form id="equipmentForm">
+            <input type="text" id="equipmentName" placeholder="Equipment Name" required>
+            <input type="text" id="equipmentType" placeholder="Type (e.g., Tractor, Harvester)" required>
+            <input type="text" id="equipmentCondition" placeholder="Condition (New, Used, Needs Repair)" required>
+            <button type="submit">Add Equipment</button>
+        </form>
+
+        <ul id="equipmentList">
+            <li class="loading">Loading equipment...</li>
+        </ul>
+    </div>
+
+<script>
+    let farmId = window.location.pathname.split("/").pop();
+
+    async function loadFarm() {
+        let response = await fetch(`/farm/${farmId}`);
+        let farm = await response.json();
+        document.getElementById("farmName").innerText = farm.name;
+        document.getElementById("farmLocation").innerText = "Location: " + farm.location;
+        document.getElementById("farmSize").innerText = "Size: " + farm.size + " acres";
+    }
+
+    async function loadCrops() {
+        let response = await fetch(`/farm/${farmId}/crops`);
+        let crops = await response.json();
+        let cropList = document.getElementById("cropList");
+        cropList.innerHTML = "";
+
+        if (crops.length === 0) {
+            cropList.innerHTML = "<li>No crops added yet</li>";
+            return;
+        }
+
+        crops.forEach(crop => {
+            let li = document.createElement("li");
+            li.innerHTML = `
+                <div class="item-details">
+                    <strong>${crop.name}</strong> 
+                    <span class="badge">${crop.type}</span>
+                    <div>${crop.quantity} kg, Planted: ${formatDate(crop.planted_date)}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="delete-btn" onclick="deleteCrop('${crop.id}')">Delete</button>
+                </div>
+            `;
+            cropList.appendChild(li);
+        });
+    }
+
+    document.getElementById("cropForm").onsubmit = async function(event) {
+        event.preventDefault();
+        let name = document.getElementById("cropName").value;
+        let type = document.getElementById("cropType").value;
+        let quantity = document.getElementById("cropQuantity").value;
+        let planted_date = document.getElementById("cropDate").value;
+
+        await fetch(`/farm/${farmId}/add_crop`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, type, quantity, planted_date })
+        });
+
+        document.getElementById("cropForm").reset();
+        loadCrops();
+    };
+
+    async function deleteCrop(id) {
+        if (confirm("Are you sure you want to delete this crop?")) {
+            await fetch(`/farm/${farmId}/delete_crop/${id}`, { method: "DELETE" });
+            loadCrops();
+        }
+    }
+
+    async function loadLivestock() {
+        let response = await fetch(`/farm/${farmId}/livestock`);
+        let livestock = await response.json();
+        let livestockList = document.getElementById("livestockList");
+        livestockList.innerHTML = "";
+
+        if (livestock.length === 0) {
+            livestockList.innerHTML = "<li>No livestock added yet</li>";
+            return;
+        }
+
+        livestock.forEach(item => {
+            let li = document.createElement("li");
+            
+            li.innerHTML = `
+                <div class="item-details">
+                    <strong>${item.name}</strong>
+                    <span class="badge">${item.type}</span>
+                    <div>${item.count} animals, ${item.age} months old</div>
+                    <div>Status: <span class="badge">${item.health_status}</span></div>
+                </div>
+                <div class="item-actions">
+                    <a href="/livestock/${item.id}/vaccination_page" 
+                        style="text-decoration: none; background-color: var(--secondary-color); 
+                            color: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">
+                        View Vaccinations
+                    </a>
+                    <button class="delete-btn" onclick="deleteLivestock('${item.id}')">Delete</button>
+                </div>
+            `;
+            livestockList.appendChild(li);
+        });
+    }
+
+    document.getElementById("livestockForm").onsubmit = async function(event) {
+        event.preventDefault();
+        let name = document.getElementById("name").value;
+        let type = document.getElementById("type").value;
+        let count = document.getElementById("count").value;
+        let age = document.getElementById("age").value;
+        let health_status = document.getElementById("health_status").value;
+
+        await fetch(`/farm/${farmId}/add_livestock`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, type, count, age, health_status })
+        });
+
+        document.getElementById("livestockForm").reset();
+        loadLivestock();
+    };
+    
+
+    async function deleteLivestock(id) {
+        if (confirm("Are you sure you want to delete this livestock?")) {
+            await fetch(`/livestock/${id}/delete`, { method: "DELETE" });
+            loadLivestock();
+        }
+    }
+
+    async function loadEquipment() {
+        let response = await fetch(`/farm/${farmId}/equipment`);
+        let equipment = await response.json();
+        let equipmentList = document.getElementById("equipmentList");
+        equipmentList.innerHTML = "";
+
+        if (equipment.length === 0) {
+            equipmentList.innerHTML = "<li>No equipment added yet</li>";
+            return;
+        }
+
+        equipment.forEach(item => {
+            let li = document.createElement("li");
+            let conditionClass = getConditionClass(item.condition);
+            
+            li.innerHTML = `
+                <div class="item-details">
+                    <strong>${item.name}</strong>
+                    <span class="badge">${item.type}</span>
+                    <div>Condition: <span class="badge">${item.condition}</span></div>
+                </div>
+                <div class="item-actions">
+                    <button class="delete-btn" onclick="deleteEquipment('${item.id}')">Delete</button>
+                </div>
+            `;
+            equipmentList.appendChild(li);
+        });
+    }
+
+    document.getElementById("equipmentForm").onsubmit = async function(event) {
+        event.preventDefault();
+        let name = document.getElementById("equipmentName").value;
+        let type = document.getElementById("equipmentType").value;
+        let condition = document.getElementById("equipmentCondition").value;
+
+        await fetch(`/farm/${farmId}/add_equipment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, type, condition })
+        });
+
+        document.getElementById("equipmentForm").reset();
+        loadEquipment();
+    };
+
+    async function deleteEquipment(id) {
+        if (confirm("Are you sure you want to delete this equipment?")) {
+            await fetch(`/equipment/${id}/delete`, { method: "DELETE" });
+            loadEquipment();
+        }
+    }
+
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
+    function getConditionClass(condition) {
+        condition = condition.toLowerCase();
+        if (condition.includes('new')) return 'good';
+        if (condition.includes('used')) return 'fair';
+        if (condition.includes('repair')) return 'poor';
+        return 'fair';
+    }
+
+    // Load all data on page load
+    loadFarm();
+    loadCrops();
+    loadLivestock();
+    loadEquipment();
+</script>
+</body>
+</html>

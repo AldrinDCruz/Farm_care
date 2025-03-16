@@ -1,0 +1,55 @@
+<h2>Livestock Vaccination Records</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>S.No.</th>
+            <th>Name of Disease</th>
+            <th>Primary Vaccination</th>
+            <th>Regular Vaccination</th>
+            <th>Administered</th>
+        </tr>
+    </thead>
+    <tbody id="vaccinationTable"></tbody>
+</table>
+
+<button id="saveVaccinations">Save Vaccination Records</button>
+
+<script>
+async function loadVaccinations(livestockId) {
+    let response = await fetch(`/livestock/${livestockId}/vaccinations`);
+    let vaccinations = await response.json();
+    let vaccinationTable = document.getElementById("vaccinationTable");
+    vaccinationTable.innerHTML = "";
+
+    vaccinations.forEach((vaccine, index) => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${vaccine.name}</td>
+            <td>${vaccine.primary}</td>
+            <td>${vaccine.regular}</td>
+            <td>
+                <input type="checkbox" class="vaccineCheckbox" data-vaccine="${vaccine.name}" ${vaccine.taken ? "checked" : ""}>
+                ${vaccine.date_given ? ` (Given on: ${vaccine.date_given})` : ""}
+            </td>
+        `;
+        vaccinationTable.appendChild(row);
+    });
+}
+
+document.getElementById("saveVaccinations").addEventListener("click", async function() {
+    let checkboxes = document.querySelectorAll(".vaccineCheckbox");
+    let takenVaccines = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.dataset.vaccine);
+
+    await fetch(`/livestock/${livestockId}/update_vaccinations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ takenVaccines })
+    });
+
+    alert("Vaccination records updated!");
+});
+
+// Call function to load vaccinations (Replace `livestockId` with actual ID)
+loadVaccinations(livestockId);
+</script>
