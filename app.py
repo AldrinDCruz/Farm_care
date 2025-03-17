@@ -1,20 +1,19 @@
 from flask import Flask, request, jsonify, session, render_template, redirect, url_for
-from flask_session import Session
 from supabase import create_client, Client
-from flask_bcrypt import Bcrypt
 import os
 from datetime import datetime
+import hashlib  # Standard library for hashing
 
 app = Flask(__name__)
 
-# Flask Session Configuration
+# Replace Flask-Session with Flask's built-in session
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"  
-Session(app)
+# Set a secret key for session management
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
 
 # Supabase Configuration
-SUPABASE_URL = "https://pwohpwzbttvewrouiqdz.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://pwohpwzbttvewrouiqdz.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 import datetime
@@ -45,7 +44,14 @@ def initialize_vaccination_records(livestock_id):
 
     supabase.table("vaccinations").insert(records).execute()
 
-bcrypt = Bcrypt(app)  # For password hashing
+def hash_password(password):
+    """Hash a password using SHA-256"""
+    salt = "farm_care_salt"  # In production, use a proper salt strategy
+    return hashlib.sha256((password + salt).encode()).hexdigest()
+
+def check_password(hashed_password, user_password):
+    """Verify a password against its hash"""
+    return hashed_password == hash_password(user_password)
 
 @app.route("/")
 def home():
@@ -64,7 +70,7 @@ def signup():
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
-        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        hashed_password = hash_password(password)  # Use our new hash function
 
         # Insert user into Supabase
         response = supabase.table("users").insert({"name": name, "email": email, "password": hashed_password}).execute()
@@ -85,7 +91,7 @@ def login():
         response = supabase.table("users").select("*").eq("email", email).execute()
         user = response.data[0] if response.data else None
 
-        if user and bcrypt.check_password_hash(user["password"], password):
+        if user and check_password(user["password"], password):  # Use our new check function
             session["user"] = user["email"]
             return redirect(url_for("dashboard"))
         return jsonify({"error": "Invalid email or password!"}), 401
@@ -300,6 +306,10 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
+# Set secret key from environment variable or use a default for development
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
+
+# Use the PORT environment variable provided by Render
 if __name__ == "__main__":
-    app.secret_key = "supersecretkey"  
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

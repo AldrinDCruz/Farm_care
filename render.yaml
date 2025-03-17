@@ -8,4 +8,4 @@ services:
       - key: SUPABASE_URL
         value: "https://pwohpwzbttvewrouiqdz.supabase.co"
       - key: SUPABASE_KEY
-        value:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ"
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3b2hwd3pidHR2ZXdyb3VpcWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0MTIyMTEsImV4cCI6MjA1Njk4ODIxMX0.gfnzbrNkPhA4RH7zSxE7_0AbO7HWOvzpH6KApusuyyQ"
